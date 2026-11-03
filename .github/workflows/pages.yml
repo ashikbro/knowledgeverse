@@ -3,6 +3,8 @@ name: Deploy Knowledgeverse showcase
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -15,7 +17,37 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate showcase
+        run: |
+          python - <<'PY'
+          import re
+          from pathlib import Path
+
+          root = Path("web")
+          html = (root / "index.html").read_text()
+          references = re.findall(r'(?:href|src)="([^"]+)"', html)
+          local = [ref.split("#", 1)[0].split("?", 1)[0] for ref in references
+                   if not ref.startswith(("http://", "https://", "#", "mailto:"))]
+          missing = [ref for ref in local if not (root / ref).is_file()]
+          if missing:
+              raise SystemExit(f"Missing local assets: {', '.join(missing)}")
+          PY
+          node --check web/app.js
+          python -m http.server 8000 --directory web >/tmp/knowledgeverse-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          sleep 1
+          curl --fail --silent --show-error http://127.0.0.1:8000/ >/dev/null
+          curl --fail --silent --show-error http://127.0.0.1:8000/app.js >/dev/null
+          curl --fail --silent --show-error http://127.0.0.1:8000/styles.css >/dev/null
+
   deploy:
+    needs: validate
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
