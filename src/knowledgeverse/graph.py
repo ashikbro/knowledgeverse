@@ -1,6 +1,7 @@
 """A deterministic in-memory knowledge graph."""
 
 from dataclasses import dataclass
+import json
 
 
 @dataclass(frozen=True)
@@ -46,3 +47,41 @@ class KnowledgeGraph:
             for target in targets
         }
         return [self.nodes[target] for target in sorted(target_ids)]
+
+    def connected(self, node_id: str, depth: int = 1, undirected: bool = True) -> list[Node]:
+        if node_id not in self.nodes:
+            raise KeyError("node does not exist")
+        if depth < 1:
+            raise ValueError("depth must be at least 1")
+        seen = {node_id}
+        frontier = {node_id}
+        for _ in range(depth):
+            next_frontier: set[str] = set()
+            for source, target in self.edge_pairs():
+                if source in frontier:
+                    next_frontier.add(target)
+                if undirected and target in frontier:
+                    next_frontier.add(source)
+            next_frontier -= seen
+            seen |= next_frontier
+            frontier = next_frontier
+        return [self.nodes[item] for item in sorted(seen - {node_id})]
+
+    def edge_pairs(self) -> list[tuple[str, str]]:
+        return sorted(
+            (source, target)
+            for (source, _relation), targets in self.edges.items()
+            for target in targets
+        )
+
+    def export_json(self) -> str:
+        edges = [
+            {"source": source, "relation": relation, "target": target}
+            for (source, relation), targets in sorted(self.edges.items())
+            for target in sorted(targets)
+        ]
+        return json.dumps(
+            {"nodes": [node.__dict__ for node in sorted(self.nodes.values(), key=lambda item: item.id)], "edges": edges},
+            indent=2,
+            sort_keys=True,
+        )

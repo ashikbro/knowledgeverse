@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Knowledgeverse: a local-first typed knowledge graph.">
+    <title>Knowledgeverse</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header><a class="brand" href="#"><span>◈</span> Knowledgeverse</a><nav><a href="#graph">Graph</a><a href="#concepts">Concepts</a><a href="https://github.com/ashikbro/knowledgeverse">Source ↗</a></nav></header>
+    <main>
+      <section class="hero"><div><p class="eyebrow">Local-first knowledge graph</p><h1>Ideas are more useful<br>when they <em>connect.</em></h1><p class="lede">Knowledgeverse turns notes, concepts, and source-backed information into a graph you can search and explore—not a black box that pretends to know.</p><div class="actions"><a class="button primary" href="#graph">Explore the graph ↓</a><a class="button ghost" href="https://github.com/ashikbro/knowledgeverse">Read the core ↗</a></div></div><div class="hero-orbit"><div class="orbit o1"></div><div class="orbit o2"></div><div class="hero-node n1">AI</div><div class="hero-node n2">Trust</div><div class="hero-node n3">Research</div><div class="hero-node n4">Ideas</div></div></section>
+      <section id="graph" class="graph-section"><div class="section-head"><div><p class="eyebrow">Interactive explorer</p><h2>See the relationships.</h2><p>Click a concept to reveal its neighborhood. Search works across labels and content.</p></div><input id="search" type="search" placeholder="Search concepts..."></div><div class="graph-workspace"><aside class="node-list" id="node-list"></aside><div class="graph-card"><svg id="graph" aria-label="Interactive knowledge graph"></svg><div class="graph-tip">Select any node to explore its neighborhood</div></div></div></section>
+      <section id="concepts" class="concepts"><div><p class="eyebrow">Typed, not tangled</p><h2>Every connection<br>has meaning.</h2></div><div class="relation-grid"><article><b>supports</b><p>One idea provides evidence, context, or a foundation for another.</p></article><article><b>depends-on</b><p>A concept requires another concept to be understood or applied.</p></article><article><b>relates-to</b><p>A deliberate association that helps discovery without claiming causality.</p></article></div></section>
+    </main>
+    <footer>Knowledgeverse · deterministic graph primitives · AI providers intentionally separate</footer>
+    <script src="app.js"></script>
+  </body>
+</html>
