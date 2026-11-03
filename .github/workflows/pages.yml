@@ -37,6 +37,13 @@ jobs:
               raise SystemExit(f"Missing local assets: {', '.join(missing)}")
           PY
           node --check web/app.js
+          python -m http.server 8000 --directory web >/tmp/knowledgeverse-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          sleep 1
+          curl --fail --silent --show-error http://127.0.0.1:8000/ >/dev/null
+          curl --fail --silent --show-error http://127.0.0.1:8000/app.js >/dev/null
+          curl --fail --silent --show-error http://127.0.0.1:8000/styles.css >/dev/null
 
   deploy:
     needs: validate
