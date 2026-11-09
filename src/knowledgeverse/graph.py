@@ -16,6 +16,34 @@ class KnowledgeGraph:
         self.nodes: dict[str, Node] = {}
         self.edges: dict[tuple[str, str], set[str]] = {}
 
+    @classmethod
+    def from_json(cls, payload: str) -> "KnowledgeGraph":
+        data = json.loads(payload)
+        if (
+            not isinstance(data, dict)
+            or not isinstance(data.get("nodes"), list)
+            or not isinstance(data.get("edges"), list)
+        ):
+            raise ValueError("graph JSON must contain node and edge lists")
+
+        graph = cls()
+        for node in data["nodes"]:
+            if not isinstance(node, dict) or not all(
+                isinstance(node.get(field), str) for field in ("id", "label", "content")
+            ):
+                raise ValueError("each node must include string id, label, and content")
+            graph.add_node(node["id"], node["label"], node["content"])
+
+        for edge in data["edges"]:
+            if not isinstance(edge, dict) or not all(
+                isinstance(edge.get(field), str)
+                for field in ("source", "relation", "target")
+            ):
+                raise ValueError("each edge must include string source, relation, and target")
+            graph.connect(edge["source"], edge["relation"], edge["target"])
+
+        return graph
+
     def add_node(self, node_id: str, label: str, content: str) -> Node:
         if not node_id.strip() or not label.strip():
             raise ValueError("node_id and label are required")

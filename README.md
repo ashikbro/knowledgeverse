@@ -19,8 +19,9 @@ PYTHONPATH=src .venv/bin/pytest
 ```
 
 The graph API supports `add_node`, `connect`, `search`, `neighbors`,
-`connected`, and `export_json`. `connected` traverses relationships in both
-directions by default so discovery does not depend on edge orientation.
+`connected`, `export_json`, and `from_json`. JSON exports can be imported to
+restore nodes and typed relationships. `connected` traverses relationships in
+both directions by default so discovery does not depend on edge orientation.
 
 ## Browser showcase
 
