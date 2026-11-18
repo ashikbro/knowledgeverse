@@ -1,16 +1,19 @@
 # Knowledgeverse
 
-Local-first typed knowledge graph primitives for connecting notes, concepts,
-and source-backed information.
+**Local-first typed knowledge graph** for connecting notes, concepts, and source-backed information.
 
-## Current status
+Search, traverse neighborhoods, and export portable JSON — all without sending your data anywhere.
 
-The repository includes deterministic in-memory nodes, typed relationships,
-full-text term search, bounded neighborhood traversal, and portable JSON graph
-export. AI query providers, persistence, decentralized replication, and
-authentication are not implemented yet.
+## What it does
 
-## Development
+- Deterministic in-memory nodes and typed relationships
+- Full-text term search
+- Bounded neighborhood traversal
+- Portable JSON graph export
+
+AI query providers, persistence, decentralized replication, and authentication are not implemented yet.
+
+## Quick start
 
 ```sh
 python -m venv .venv
@@ -18,16 +21,16 @@ python -m venv .venv
 PYTHONPATH=src .venv/bin/pytest
 ```
 
-The graph API supports `add_node`, `connect`, `search`, `neighbors`,
-`connected`, and `export_json`. `connected` traverses relationships in both
-directions by default so discovery does not depend on edge orientation.
+Core API: `add_node`, `connect`, `search`, `neighbors`, `connected`, `export_json`.
 
-## Browser showcase
+## Browser demo
 
-The `web/` directory contains a dependency-free interactive graph explorer
-with typed relationships, search, concept selection, and a visual neighborhood
-view. Preview it with:
+Interactive graph explorer in `web/` (no dependencies):
 
 ```sh
 python -m http.server 8000 --directory web
 ```
+
+## Keywords
+
+knowledge graph · local-first · python · search · notes · knowledge management
