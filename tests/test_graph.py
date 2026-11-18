@@ -29,3 +29,26 @@ def test_bounded_undirected_traversal_and_export():
     assert [node.id for node in graph.connected("c", depth=1)] == ["b"]
     assert [node.id for node in graph.connected("c", depth=2)] == ["a", "b"]
     assert '"relation": "relates-to"' in graph.export_json()
+
+
+def test_empty_query_returns_all():
+    graph = KnowledgeGraph()
+    graph.add_node("a", "Alpha", "")
+    graph.add_node("b", "Beta", "")
+    assert len(graph.search("")) == 2
+
+
+def test_rejects_blank_node_id_or_label():
+    graph = KnowledgeGraph()
+    with pytest.raises(ValueError):
+        graph.add_node("", "Label", "content")
+    with pytest.raises(ValueError):
+        graph.add_node("id", "  ", "content")
+
+
+def test_connect_rejects_blank_relation():
+    graph = KnowledgeGraph()
+    graph.add_node("a", "A", "")
+    graph.add_node("b", "B", "")
+    with pytest.raises(ValueError):
+        graph.connect("a", "  ", "b")
